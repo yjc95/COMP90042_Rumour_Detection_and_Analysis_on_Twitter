@@ -3,7 +3,7 @@ import tweepy
 import time
 import pandas
 
-
+# 于老板的号我电脑在爬，你们先用我的
 class CrawlerConfig:
     API_Key = 'CaOARF3tCzbfb9i85bYNpG2Ac'
     API_Key_Secret = 'KuXILNgkz4im52FE7dweV2xn3LwtjtQCFGvup2dNVmLKiomQ5W'
