@@ -39,6 +39,9 @@ client = tweepy.Client(bearer_token=auth.Bearer_Token,
                        return_type=dict)
 
 count = 0
+line_number = 0
+
+time.sleep(1000)
 
 with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f:
     for line in f.readlines():
@@ -52,6 +55,9 @@ with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f:
                                            expansions=['author_id'])
             count += 1
             if count == 450:
-                time.sleep(900)
+                print('450 tweets have been crawled!')
+                time.sleep(1000)
         # print(type(tweets), tweets)
+        line_number += 1
+        print(line_number, 'lines have been crawled!')
         save(tweets, './project-data/tweet-train.txt')
