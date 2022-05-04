@@ -53,10 +53,13 @@ with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f:
         # print(type(ids), ids)
         tweets = {}
         for id in ids:
-            tweets[id] = client.get_tweets(ids=id,
-                                           tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
-                                           user_fields=['public_metrics', 'description', 'created_at', 'location'],
-                                           expansions=['author_id'])
+            try:
+                tweets[id] = client.get_tweets(ids=id,
+                                               tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
+                                               user_fields=['public_metrics', 'description', 'created_at', 'location'],
+                                               expansions=['author_id'])
+            except Exception:
+                time.sleep(3)
             count += 1
             if count == 445:
                 print('450 tweets have been crawled!')
