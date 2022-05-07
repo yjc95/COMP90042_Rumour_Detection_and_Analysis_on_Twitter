@@ -43,7 +43,60 @@ cannot_find = []
 
 # time.sleep(1000)
 
-with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f1, open('./project-data/tweet-train.txt', 'r', encoding='utf-8') as f2:
+# with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f1, open('./project-data/tweet-train.txt', 'r', encoding='utf-8') as f2:
+#     id_all = f1.readlines()
+#     tweet_all = f2.readlines()
+#     # ids = id_all[1][:-2].split(',')
+#     # tweets = json.loads(tweet_all[1])
+#     # print(type(ids), ids)
+#     # print('2' in tweets)
+#     # print(type(tweets), tweets['554893579957460992'])
+#     for i in range(1895):
+#         ids = id_all[i][:-2].split(',')
+#         tweets = json.loads(tweet_all[i])
+#         for id in ids:
+#             if id not in tweets:
+#                 second = False
+#                 while True:
+#                     try:
+#                         tweets[id] = client.get_tweets(ids=id,
+#                                                        tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
+#                                                        user_fields=['public_metrics', 'description', 'created_at',
+#                                                                     'location'],
+#                                                        expansions=['author_id'])
+#                         break
+#                     except Exception:
+#                         if second:
+#                             cannot_find.append(id)
+#                         else:
+#                             print('Let crawler sleep for 16 mins!')
+#                             time.sleep(960)
+#                             second = True
+#             count += 1
+#         line_number += 1
+#         print(line_number, 'lines have been crawled!')
+#         save(tweets, './project-data/tweet-train-complete.txt')
+#
+# print(count, 'tweets missing in the initial crawled data!')
+# print(len(cannot_find), 'tweets still cannot be crawled!')
+# print('These tweets still cannot be crawled: \n', cannot_find)
+
+
+def check_id(id_file_path, data_file_path):
+    count = 0
+    with open(id_file_path, 'r', encoding='utf-8') as f1, open(data_file_path, 'r', encoding='utf-8') as f2:
+        id_all = f1.readlines()
+        tweet_all = f2.readlines()
+        for i in range(len(id_all)):
+            ids = id_all[i][:-1].split(',')
+            tweets_ini = json.loads(tweet_all[i])
+            for j in range(len(ids)):
+                if ids[j] not in tweets_ini:
+                    count += 1
+    return count
+
+
+with open('./project-data/dev.data.txt', 'r', encoding='utf-8') as f1, open('./project-data/tweet-dev-complete.txt', 'r', encoding='utf-8') as f2:
     id_all = f1.readlines()
     tweet_all = f2.readlines()
     # ids = id_all[1][:-2].split(',')
@@ -51,32 +104,53 @@ with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f1, open('.
     # print(type(ids), ids)
     # print('2' in tweets)
     # print(type(tweets), tweets['554893579957460992'])
-    for i in range(1895):
-        ids = id_all[i][:-2].split(',')
-        tweets = json.loads(tweet_all[i])
-        for id in ids:
-            if id not in tweets:
+    for i in range(len(id_all)):
+        ids = id_all[i][:-1].split(',')
+        tweets_ini = json.loads(tweet_all[i])
+        tweets = {}
+        for j in range(len(ids)-1):
+            if ids[j] in tweets_ini:
+                tweets[ids[j]] = tweets_ini[ids[j]]
+            else:
                 second = False
                 while True:
                     try:
-                        tweets[id] = client.get_tweets(ids=id,
-                                                       tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
-                                                       user_fields=['public_metrics', 'description', 'created_at',
-                                                                    'location'],
-                                                       expansions=['author_id'])
+                        tweets[ids[j]] = client.get_tweets(ids=ids[j],
+                                                            tweet_fields=['text', 'created_at', 'lang', 'geo',
+                                                                          'public_metrics'],
+                                                            user_fields=['public_metrics', 'description', 'created_at',
+                                                                         'location'],
+                                                            expansions=['author_id'])
                         break
                     except Exception:
                         if second:
-                            cannot_find.append(id)
+                            cannot_find.append(ids[j])
                         else:
                             print('Let crawler sleep for 16 mins!')
                             time.sleep(960)
                             second = True
-            count += 1
+
+        last_id = ids[len(ids)-1]
+        # print(last_id)
+        second = False
+        while True:
+            try:
+                tweets[last_id] = client.get_tweets(ids=last_id,
+                                               tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
+                                               user_fields=['public_metrics', 'description', 'created_at',
+                                                            'location'],
+                                               expansions=['author_id'])
+                break
+            except Exception:
+                if second:
+                    cannot_find.append(last_id)
+                else:
+                    print('Let crawler sleep for 16 mins!')
+                    time.sleep(960)
+                    second = True
         line_number += 1
         print(line_number, 'lines have been crawled!')
-        save(tweets, './project-data/tweet-train-complete.txt')
+        save(tweets, './project-data/tweet-dev-final.txt')
 
-print(count, 'tweets missing in the initial crawled data!')
 print(len(cannot_find), 'tweets still cannot be crawled!')
 print('These tweets still cannot be crawled: \n', cannot_find)
