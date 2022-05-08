@@ -1,7 +1,7 @@
 import json
 import tweepy
 import time
-import pandas
+
 
 class CrawlerConfig:
     # API_Key = 'CaOARF3tCzbfb9i85bYNpG2Ac'
@@ -25,15 +25,13 @@ def save(dict, file_path):
         f.write('\n')
 
 
-def load(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        data = f.readline().strip()
-        return json.loads(data)
+# def load(file_path):
+#     with open(file_path, 'r', encoding='utf-8') as f:
+#         data = f.readline().strip()
+#         return json.loads(data)
 
 
 auth = CrawlerConfig()
-
-# start_time = time.time()
 
 client = tweepy.Client(bearer_token=auth.Bearer_Token,
                        consumer_key=auth.API_Key,
@@ -42,30 +40,33 @@ client = tweepy.Client(bearer_token=auth.Bearer_Token,
                        access_token_secret=auth.Access_Token_Secret,
                        return_type=dict)
 
-count = 0
 line_number = 0
+cannot_find = []
 
-# time.sleep(1000)
-
-with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f:
+with open('./project-data/covid-pt1.txt', 'r', encoding='utf-8') as f:
     for line in f.readlines():
-        ids = line[:-2].split(',')
-        # print(type(ids), ids)
+        ids = line[:-1].split(',')
         tweets = {}
         for id in ids:
-            try:
-                tweets[id] = client.get_tweets(ids=id,
-                                               tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
-                                               user_fields=['public_metrics', 'description', 'created_at', 'location'],
-                                               expansions=['author_id'])
-            except Exception:
-                time.sleep(3)
-            count += 1
-            if count == 445:
-                print('450 tweets have been crawled!')
-                count = 0
-                time.sleep(1000)
-        # print(type(tweets), tweets)
+            second = False
+            while True:
+                try:
+                    tweets[id] = client.get_tweets(ids=id,
+                                                   tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
+                                                   user_fields=['public_metrics', 'description', 'created_at', 'location'],
+                                                   expansions=['author_id'])
+                    break
+                except Exception:
+                    if second:
+                        cannot_find.append(id)
+                        break
+                    else:
+                        print('Let crawler sleep for 16 mins!')
+                        time.sleep(960)
+                        second = True
         line_number += 1
         print(line_number, 'lines have been crawled!')
-        save(tweets, './project-data/tweet-train.txt')
+        save(tweets, './project-data/tweet-covid-pt1.txt')
+
+print(len(cannot_find), 'tweets cannot be crawled!')
+print('These tweets cannot be crawled: \n', cannot_find)
