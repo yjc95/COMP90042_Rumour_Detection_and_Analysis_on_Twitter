@@ -68,6 +68,7 @@ cannot_find = []
 #                     except Exception:
 #                         if second:
 #                             cannot_find.append(id)
+#                             break
 #                         else:
 #                             print('Let crawler sleep for 16 mins!')
 #                             time.sleep(960)
@@ -125,6 +126,7 @@ with open('./project-data/dev.data.txt', 'r', encoding='utf-8') as f1, open('./p
                     except Exception:
                         if second:
                             cannot_find.append(ids[j])
+                            break
                         else:
                             print('Let crawler sleep for 16 mins!')
                             time.sleep(960)
