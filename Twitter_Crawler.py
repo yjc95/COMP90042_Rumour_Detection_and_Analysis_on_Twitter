@@ -43,7 +43,7 @@ client = tweepy.Client(bearer_token=auth.Bearer_Token,
 line_number = 0
 cannot_find = []
 
-# with open('./project-data/covid-pt2.txt', 'r', encoding='utf-8') as f:
+# with open('./project-data/covid-pt1.txt', 'r', encoding='utf-8') as f:
 #     for line in f.readlines():
 #         ids = line[:-1].split(',')
 #         tweets = {}
@@ -66,12 +66,12 @@ cannot_find = []
 #                         second = True
 #         line_number += 1
 #         print(line_number, 'lines have been crawled!')
-#         save(tweets, './project-data/tweet-covid-pt2.txt')
+#         save(tweets, './project-data/tweet-covid-pt1.txt')
 
 id_list = []
 id_list_temp = []
 
-with open('./project-data/covid-pt6.txt', 'r', encoding='utf-8') as f:
+with open('./project-data/covid-pt4.txt', 'r', encoding='utf-8') as f:
     for line in f.readlines():
         ids = line[:-1].split(',')
         tweets = {}
@@ -85,7 +85,7 @@ id_list.append(id_list_temp)
 
 # print(id_list[0])
 # print(id_list[len(id_list)-1])
-# print(len(id_list))
+print('The total line number is', len(id_list))
 # print(len(id_list[0]))
 # print(len(id_list[len(id_list)-1]))
 
@@ -94,9 +94,9 @@ for ids in id_list:
     while True:
         try:
             tweets = client.get_tweets(ids=ids,
-                                           tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
-                                           user_fields=['public_metrics', 'description', 'created_at', 'location'],
-                                           expansions=['author_id'])
+                                       tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
+                                       user_fields=['public_metrics', 'description', 'created_at', 'location'],
+                                       expansions=['author_id'])
             break
         except Exception:
             if second:
@@ -107,8 +107,8 @@ for ids in id_list:
                 time.sleep(960)
                 second = True
     line_number += 1
-    print(line_number, 'out of 276 lines have been crawled!')
-    save(tweets, './project-data/tweet-covid-pt6-raw.txt')
+    print(line_number, 'lines have been crawled!')
+    save(tweets, './project-data/tweet-covid-pt4-raw.txt')
 
 print(len(cannot_find), 'tweets cannot be crawled!')
 print('These tweets cannot be crawled: \n', cannot_find)
