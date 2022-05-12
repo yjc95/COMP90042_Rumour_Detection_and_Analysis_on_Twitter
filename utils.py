@@ -1,4 +1,11 @@
 import json
+import csv
+
+
+def save_csv(content, file_path):
+    with open(file_path, 'a', encoding='UTF8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(content)
 
 
 def save(content, file_path):
@@ -42,4 +49,4 @@ def covid_data_combine():
 
 
 # covid_id_segmentation()
-covid_data_combine()
+# covid_data_combine()
