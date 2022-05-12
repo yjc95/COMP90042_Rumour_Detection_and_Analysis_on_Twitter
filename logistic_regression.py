@@ -126,16 +126,11 @@ def preprocess_data2(data, labels):
 
     for i in range(len(data)):
         tweet = data[i]
-        # print('1 ', tweet)
         # tweet_emoji_free = emoji.get_emoji_regexp().sub(r'', tweet)
         tweet_emoji_free = emoji.replace_emoji(tweet, replace='')
-        # print('2 ', tweet_emoji_free)
         tweet_textual_emoji_free = re.sub(emotion_string, '', tweet_emoji_free)
-        # print('3 ', tweet_textual_emoji_free)
         tweet_lower = tweet_textual_emoji_free.lower()
-        # print('4 ', tweet_lower)
         tweet_token = [token.text for token in nlp(tweet_lower)]
-        # print('5 ', tweet_token)
         # if len(tweet_token) == 0:
         #     continue
 
