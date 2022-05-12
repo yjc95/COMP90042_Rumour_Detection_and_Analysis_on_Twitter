@@ -1,7 +1,6 @@
 import json
 import tweepy
 import time
-import pandas
 
 class CrawlerConfig:
     API_Key = "EnDNAmWMuYdkG8yDNoyNNrbxN"
@@ -28,8 +27,6 @@ def load(file_path):
 
 auth = CrawlerConfig()
 
-# start_time = time.time()
-
 client = tweepy.Client(bearer_token=auth.Bearer_Token,
                        consumer_key=auth.API_Key,
                        consumer_secret=auth.API_Key_Secret,
@@ -40,8 +37,6 @@ client = tweepy.Client(bearer_token=auth.Bearer_Token,
 count = 0
 line_number = 0
 cannot_find = []
-
-# time.sleep(1000)
 
 # with open('./project-data/train.data.txt', 'r', encoding='utf-8') as f1, open('./project-data/tweet-train.txt', 'r', encoding='utf-8') as f2:
 #     id_all = f1.readlines()
@@ -100,11 +95,6 @@ def check_id(id_file_path, data_file_path):
 with open('./project-data/dev.data.txt', 'r', encoding='utf-8') as f1, open('./project-data/tweet-dev-complete.txt', 'r', encoding='utf-8') as f2:
     id_all = f1.readlines()
     tweet_all = f2.readlines()
-    # ids = id_all[1][:-2].split(',')
-    # tweets = json.loads(tweet_all[1])
-    # print(type(ids), ids)
-    # print('2' in tweets)
-    # print(type(tweets), tweets['554893579957460992'])
     for i in range(len(id_all)):
         ids = id_all[i][:-1].split(',')
         tweets_ini = json.loads(tweet_all[i])
@@ -133,15 +123,13 @@ with open('./project-data/dev.data.txt', 'r', encoding='utf-8') as f1, open('./p
                             second = True
 
         last_id = ids[len(ids)-1]
-        # print(last_id)
         second = False
         while True:
             try:
                 tweets[last_id] = client.get_tweets(ids=last_id,
-                                               tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
-                                               user_fields=['public_metrics', 'description', 'created_at',
-                                                            'location'],
-                                               expansions=['author_id'])
+                                                    tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
+                                                    user_fields=['public_metrics', 'description', 'created_at', 'location'],
+                                                    expansions=['author_id'])
                 break
             except Exception:
                 if second:
