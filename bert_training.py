@@ -1,4 +1,4 @@
-from transformers import BertTokenizer
+from transformers import BertTokenizer,RobertaTokenizer, RobertaModel
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -10,7 +10,8 @@ import time
 class TrainDataset(torch.utils.data.Dataset):
     def __init__(self, filename, maxlen):
         self.df = pd.read_csv(filename).dropna().reset_index(drop=True)
-        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        # self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        self.tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
         self.maxlen = maxlen
         # self.labels = df['label'].astype('category').tolist()
         # self.texts = [tokenizer(text, padding='max_length',
@@ -53,8 +54,8 @@ train_set = TrainDataset(filename='./project-data/train.tsv', maxlen=512)
 dev_set = TrainDataset(filename='./project-data/dev.tsv', maxlen=512)
 
 # Creating intsances of training and development dataloaders
-train_loader = DataLoader(train_set, batch_size=4, num_workers=0)
-dev_loader = DataLoader(dev_set, batch_size=4, num_workers=0)
+train_loader = DataLoader(train_set, batch_size=5, num_workers=0)
+dev_loader = DataLoader(dev_set, batch_size=5, num_workers=0)
 
 print("Done preprocessing training and development data.")
 
@@ -64,7 +65,7 @@ class RumorClassifier(nn.Module):
     def __init__(self):
         super(RumorClassifier, self).__init__()
         # Instantiating BERT model object
-        self.bert_layer = BertModel.from_pretrained('bert-base-uncased')
+        self.bert_layer = RobertaModel.from_pretrained('roberta-base')
 
         # Classification layer
         # input dimension is 768 because [CLS] embedding has a dimension of 768
@@ -92,10 +93,10 @@ class RumorClassifier(nn.Module):
 
 
 gpu = 0  # gpu ID
-print("Creating the sentiment classifier, initialised with pretrained BERT-BASE parameters...")
+print("Creating the covid classifier, initialised with pretrained roberta-base parameters...")
 net = RumorClassifier()
 net.cuda(gpu)  # Enable gpu support for the model
-print("Done creating the sentiment classifier.")
+print("Done creating the covid classifier.")
 
 import torch.nn as nn
 import torch.optim as optim
@@ -168,7 +169,7 @@ def evaluate(net, criterion, dataloader, gpu):
     return mean_acc / count, mean_loss / count
 
 
-num_epoch = 8
+num_epoch = 16
 
 # fine-tune the model
 train(net, criterion, opti, train_loader, dev_loader, num_epoch, gpu)
