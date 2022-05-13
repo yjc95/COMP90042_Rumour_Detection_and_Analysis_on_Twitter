@@ -1,3 +1,7 @@
+"""
+Logistic Regression and Naive Bayes.
+Contains file IO and data preprocessing.
+"""
 import json
 import nltk
 from nltk.tokenize import TweetTokenizer
@@ -14,6 +18,7 @@ import stop_words
 x_train_data, x_dev_data, x_test_data = [], [], []
 y_train_data, y_dev_data = [], []
 
+# Read the train, dev, test files
 with open('./project-data/tweet-train-final.txt', 'r', encoding='utf-8') as f:
     tweet_all = f.readlines()
     for event in tweet_all:
@@ -79,6 +84,14 @@ with open('./project-data/test.data.txt', 'r', encoding='utf-8') as f:
 
 
 def preprocess_data(data, labels):
+    """
+    Preprocessing method 1
+    Apply nltk tokenizer and stopwords.
+
+    :param data: the text string list
+    :param labels:
+    :return: the tokenized bag of words
+    """
     tt = TweetTokenizer()
     stopwords = set(nltk.corpus.stopwords.words('english'))  # note: stopwords are all in lowercase
     processed_x = []
@@ -104,6 +117,14 @@ def preprocess_data(data, labels):
 
 
 def preprocess_data2(data, labels):
+    """
+    Preprocessing method 2
+    Apply spacy tokenizer and stopwords.
+
+    :param data: the text string list
+    :param labels:
+    :return: the tokenized bag of words
+    """
     nlp = spacy.load('en_core_web_sm')
     stopwords = [w.lower() for w in stop_words.get_stop_words('en')]
     processed_x = []
@@ -138,7 +159,6 @@ def preprocess_data2(data, labels):
         for word in token:
             BOW[word] = BOW.get(word, 0) + 1
 
-        # if len(token) != 0:
         processed_x.append(BOW)
         if i < len(labels):
             processed_y.append(labels[i])
@@ -165,11 +185,14 @@ x_test_processed, _ = preprocess_data2(x_test_data, [])
 # for i in range(5):
 #     print("Tweet =", x_test_processed[i])
 
+# Vectorize the bag of words
 vectorizer = DictVectorizer()
 x_train = vectorizer.fit_transform(x_train_processed)
 x_dev = vectorizer.transform(x_dev_processed)
 x_test = vectorizer.transform(x_test_processed)
 
+# Tune the variables
+#
 # alpha_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 # for a in alpha_list:
 #     nb = MultinomialNB(alpha=a)
@@ -217,6 +240,7 @@ print("The accuracy of Logistic Regression Classifier with C = 1.0 is", round(lr
 nb_y_pred = nb.predict(x_test)
 lr_y_pred = lr.predict(x_test)
 
+# Write prediction results
 with open('./project-data/bayes-predict3.csv', 'w', encoding='utf-8') as f:
     writer = csv.writer(f)
     header = ['Id', 'Predicted']
