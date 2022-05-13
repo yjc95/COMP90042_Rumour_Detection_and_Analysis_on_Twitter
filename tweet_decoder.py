@@ -1,3 +1,6 @@
+"""
+Decode the raw tweet data file into the same format as the id list file
+"""
 import json
 
 
@@ -47,4 +50,3 @@ with open('./project-data/tweet-covid-pt9-raw.txt', 'r', encoding='utf-8') as f1
 
 print(len(cannot_find), 'tweets cannot be found!')
 print('These tweets cannot be found: \n', cannot_find)
-
