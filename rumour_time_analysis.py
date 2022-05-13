@@ -1,3 +1,6 @@
+"""
+Analysis tweeting time
+"""
 import json
 from utils import save_csv
 
@@ -8,6 +11,7 @@ nonrumour_month_count = [0 for i in range(12)]
 rumour_date_count = {}
 nonrumour_date_count = {}
 
+# Load tweet time count
 with open('./tweet_covid_result_bert.csv', 'r', encoding='utf-8') as f1, \
         open('./project-data/tweet-covid-final.txt', 'r', encoding='utf-8') as f2, \
         open('./project-data/covid.data.txt', 'r', encoding='utf-8') as f3:
