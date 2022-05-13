@@ -1,3 +1,6 @@
+"""
+Analyse the hashtags
+"""
 import json
 from nltk.tokenize import TweetTokenizer
 import re
@@ -7,6 +10,12 @@ nonrumour_data = []
 
 
 def data_tokenize(data):
+    """
+    Tokenize data
+
+    :param data: text string list
+    :return: the tokenized bag of words
+    """
     tt = TweetTokenizer()
     processed_x = []
 
@@ -27,6 +36,12 @@ def data_tokenize(data):
 
 
 def get_all_hashtags_unique(data):
+    """
+    Get the uniques hashtags
+
+    :param data:
+    :return:
+    """
     hashtag = set([])
     for d in data:
         for word, frequency in d.items():
@@ -36,6 +51,12 @@ def get_all_hashtags_unique(data):
 
 
 def get_all_hashtags_freq(data):
+    """
+    Get the hashtag frequency
+
+    :param data:
+    :return:
+    """
     hashtag_freq = {}
     for d in data:
         for word, frequency in d.items():
