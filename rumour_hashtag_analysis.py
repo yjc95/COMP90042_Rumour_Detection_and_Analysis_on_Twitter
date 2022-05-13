@@ -1,5 +1,4 @@
 import json
-import nltk
 from nltk.tokenize import TweetTokenizer
 import re
 
@@ -70,10 +69,6 @@ nonrumour_tokenized = data_tokenize(nonrumour_data)
 
 rumour_hashtags_unique = get_all_hashtags_unique(rumour_tokenized)
 nonrumour_hashtags_unique = get_all_hashtags_unique(nonrumour_tokenized)
-# print("Number of hashtags in rumours =", len(rumour_hashtags_unique))
-# print(sorted(rumour_hashtags_unique))
-# print("Number of hashtags in nonrumours =", len(nonrumour_hashtags_unique))
-# print(sorted(nonrumour_hashtags_unique))
 
 rumour_hashtags_freq = get_all_hashtags_freq(rumour_tokenized)
 nonrumour_hashtags_freq = get_all_hashtags_freq(nonrumour_tokenized)
@@ -83,10 +78,10 @@ print("Number of hashtags in rumours =", len(rumour_hashtags_freq_sorted))
 print(rumour_hashtags_freq_sorted[:10])
 print("Number of hashtags in nonrumours =", len(nonrumour_hashtags_freq_sorted))
 print(nonrumour_hashtags_freq_sorted[:10])
-# Number of hashtags in rumours = 1631
-# [('#covid19', 247), ('#coronavirus', 197), ('#trump', 50), ('#china', 30), ('#wuhanvirus', 26), ('#trumpvirus', 25), ('#covid_19', 24), ('#maga', 22), ('#covidー19', 19), ('#coronaviruspandemic', 19)]
-# Number of hashtags in nonrumours = 20848
-# [('#covid19', 7591), ('#coronavirus', 5254), ('#trump', 1072), ('#coronaviruspandemic', 797), ('#covidー19', 665), ('#covid_19', 661), ('#covid', 614), ('#trumpvirus', 581), ('#maga', 521), ('#wuhanvirus', 481)]
+# Number of hashtags in rumours = 1419
+# [('#covid19', 295), ('#coronavirus', 190), ('#trump', 33), ('#covid_19', 23), ('#wuhanvirus', 19), ('#covidー19', 19), ('#china', 19), ('#pandemic', 15), ('#coronaviruspandemic', 15), ('#covid', 13)]
+# Number of hashtags in nonrumours = 20970
+# [('#covid19', 7543), ('#coronavirus', 5261), ('#trump', 1089), ('#coronaviruspandemic', 801), ('#covidー19', 665), ('#covid_19', 662), ('#covid', 615), ('#trumpvirus', 593), ('#maga', 530), ('#wuhanvirus', 488)]
 
 rumour_hashtags_only = []
 nonrumour_hashtags_only = []
@@ -103,10 +98,10 @@ print("Number of hashtags in rumours =", len(rumour_hashtags_only))
 print(rumour_hashtags_only[:10])
 print("Number of hashtags in nonrumours =", len(nonrumour_hashtags_only))
 print(nonrumour_hashtags_only[:10])
-# Number of hashtags in rumours = 536
-# [('#redrobin', 2), ('#420day', 2), ('#antiamerican', 2), ('#istandwiththepresident', 1), ('#ppetochina', 1), ('#economyshutdown', 1), ('#followthedata', 1), ('#ili', 1), ('#hawleysgermwarfare', 1), ('#easterinfected', 1)]
-# Number of hashtags in nonrumours = 19753
-# [('#stayhomesavelives', 141), ('#uk', 110), ('#fakepresident', 105), ('#brexit', 80), ('#covid19uk', 80), ('#indiafightscorona', 70), ('#flattenthecurve', 69), ('#notmypresident', 67), ('#wethepeople', 66), ('#bunkerbitch', 59)]
+# Number of hashtags in rumours = 414
+# [('#420day', 2), ('#thankyouforyourservice', 2), ('#ltgov', 1), ('#elected', 1), ('#appointed', 1), ('#criminally', 1), ('#civilrightsviolations', 1), ('#abuses', 1), ('#statutesoflimitations', 1), ('#dunningkruegereffect', 1)]
+# Number of hashtags in nonrumours = 19965
+# [('#coronavirusupdates', 96), ('#sarscov2', 94), ('#votebluenomatterwho', 87), ('#trumpisacompletefailure', 83), ('#kag2020', 79), ('#bluewave2020', 69), ('#trumprecession', 69), ('#stayhomestaysafe', 65), ("#trump's", 61), ('#trumppressconf', 59)]
 
 count = 0
 
@@ -115,4 +110,4 @@ for hashtag in rumour_hashtags_unique:
         count += 1
 
 print('The number of overlap hashtag is', count)
-# The number of overlap hashtag is 1095
+# The number of overlap hashtag is 1005
