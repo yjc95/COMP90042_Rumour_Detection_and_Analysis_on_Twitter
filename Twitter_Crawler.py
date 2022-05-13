@@ -1,14 +1,12 @@
+"""
+Twitter data crawler
+"""
 import json
 import tweepy
 import time
 
 
 class CrawlerConfig:
-    # API_Key = 'CaOARF3tCzbfb9i85bYNpG2Ac'
-    # API_Key_Secret = 'KuXILNgkz4im52FE7dweV2xn3LwtjtQCFGvup2dNVmLKiomQ5W'
-    # Access_Token = '1084961461800189955-3AZbmwRsuKxwnoe9Cmb9UAgeC87pcY'
-    # Access_Token_Secret = '64a43huJk9gYR0fKA1OvPbDXAZ1BUQoTVpNvLBFIOynAm'
-    # Bearer_Token = 'AAAAAAAAAAAAAAAAAAAAAB2ucAEAAAAAhabe8%2F6r9PTdnfb506VKqQGSjS0%3DsEjcDzbkcrQCFxYqsTNf2IzJfAwlu4yK0xvkj2pDDPsJC4WznE'
     API_Key = "EnDNAmWMuYdkG8yDNoyNNrbxN"
     API_Key_Secret = "4ogFecdNh6UYcIAZGxJSwODKRu5NyjKHYr1HrjGygeMlS7Ws7y"
     Bearer_Token = "AAAAAAAAAAAAAAAAAAAAAFaQcAEAAAAAkIcOhCiC8zeiSoOwW9iPgz%2Busa4%3DI0SvisQA1BrYnp9HbNrcbqE3ZvrX8nCGv5SUrMFxEXNIfobE3O"
@@ -25,12 +23,6 @@ def save(dict, file_path):
         f.write('\n')
 
 
-# def load(file_path):
-#     with open(file_path, 'r', encoding='utf-8') as f:
-#         data = f.readline().strip()
-#         return json.loads(data)
-
-
 auth = CrawlerConfig()
 
 client = tweepy.Client(bearer_token=auth.Bearer_Token,
@@ -43,34 +35,10 @@ client = tweepy.Client(bearer_token=auth.Bearer_Token,
 line_number = 0
 cannot_find = []
 
-# with open('./project-data/covid-pt1.txt', 'r', encoding='utf-8') as f:
-#     for line in f.readlines():
-#         ids = line[:-1].split(',')
-#         tweets = {}
-#         for id in ids:
-#             second = False
-#             while True:
-#                 try:
-#                     tweets[id] = client.get_tweets(ids=id,
-#                                                    tweet_fields=['text', 'created_at', 'lang', 'geo', 'public_metrics'],
-#                                                    user_fields=['public_metrics', 'description', 'created_at', 'location'],
-#                                                    expansions=['author_id'])
-#                     break
-#                 except Exception:
-#                     if second:
-#                         cannot_find.append(id)
-#                         break
-#                     else:
-#                         print('Let crawler sleep for 16 mins!')
-#                         time.sleep(960)
-#                         second = True
-#         line_number += 1
-#         print(line_number, 'lines have been crawled!')
-#         save(tweets, './project-data/tweet-covid-pt1.txt')
-
 id_list = []
 id_list_temp = []
 
+# Open the id list waiting for crawling
 with open('./project-data/covid-pt4.txt', 'r', encoding='utf-8') as f:
     for line in f.readlines():
         ids = line[:-1].split(',')
@@ -109,6 +77,8 @@ for ids in id_list:
     line_number += 1
     print(line_number, 'lines have been crawled!')
     save(tweets, './project-data/tweet-covid-pt4-raw.txt')
+
+# The raw data needs a decoder to return to the same format of the id list
 
 print(len(cannot_find), 'tweets cannot be crawled!')
 print('These tweets cannot be crawled: \n', cannot_find)
